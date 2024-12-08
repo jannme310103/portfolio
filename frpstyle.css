@@ -1,0 +1,221 @@
+/* Allgemeine Stile */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #ddd;
+    background-color: #121212;
+}
+
+h1, h2 {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    color: #00aced;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+header {
+    background: #1e1e2f;
+    color: #fff;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: #00aced;
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(to right, #2c5364, #0f2027);
+    color: #fff;
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+}
+
+/* Features Section */
+.features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.features ul li {
+    margin: 1rem 0;
+    font-size: 1.2rem;
+}
+
+/* How it Works Section */
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.step-card {
+    background: #1e1e2f;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.step-card h3 {
+    color: #00aced;
+}
+
+/* Button für Dokumentation */
+.btn-doc {
+    display: inline-block;
+    margin-top: 15px;
+    background: #1db954; /* Passendes Grün für API */
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn-doc:hover {
+    background: #14843b; /* Dunkleres Grün für Hover-Effekt */
+}
+
+/* Code Section */
+.code pre {
+    background: #1e1e2f;
+    color: #00ffcc;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Code Container */
+.code-container {
+    display: flex;
+    align-items: flex-start; /* Stellt sicher, dass beide Container auf gleicher Höhe sind */
+    gap: 10px;
+    justify-content: flex-start;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Container für den Code (Pre-Tag) */
+pre {
+    max-width: 90%;  /* Der Codeblock nimmt jetzt 90% der Breite ein */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: auto;  /* Ermöglicht horizontales Scrollen bei langen Zeilen */
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Erklärung Container */
+.explanation-container {
+    max-width: 30%;  /* Erklärung nimmt 30% des Containers ein */
+    color: #ddd;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-y: auto;  /* Ermöglicht vertikales Scrollen für Erklärungen, falls nötig */
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Optional - Responsive Design für kleinere Bildschirme */
+@media (max-width: 768px) {
+    .code-container {
+        flex-direction: column;
+    }
+    
+    pre, .explanation-container {
+        max-width: 100%;
+    }
+}
+
+.text-left {
+    text-align: left;
+}
+
+/* Hintergrundfarbe der Screenshot-Sektion wie in der Pre-Code-Sektion */
+.code-screenshot {
+    background-color: #1e1e1e; /* Gleiche dunkle Farbe wie die Pre-Code-Sektion */
+    color: #ffffff;
+    padding: 40px 20px;
+}
+
+/* Abstand zwischen Pre-Code und Screenshot-Sektion */
+.section + .code-screenshot {
+    margin-top: 30px;
+    background: #1e1e1e; /* Abstand hinzufügen */
+}
+
+.screenshot-container {
+    margin-left: auto;
+    margin-right: 0;
+    background: #1e1e1e;
+}
+
+/* Screenshot-Bild Styling */
+.screenshot-image {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #3a3a3a;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Footer */
+footer {
+    background: #1e1e2f;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+}

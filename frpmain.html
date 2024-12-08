@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tidal Playlist Synchronizer</title>
+    <link rel="stylesheet" href="frpstyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Tidal Playlist Synchronizer</h1>
+            <nav>
+                <ul>
+                    <li><a href="https://portfolio.jann.cloud/">Zurück zur Hauptseite</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero" class="hero">
+        <div class="container hero-container">
+            <div class="hero-text">
+                <h2>Synchronisierung zweier Playlisten! 🎵</h2>
+                <p>
+                    Mit meinem Python-Programm kann ich eine Playlist automatisch zu einer anderen synchronisieren.<br>
+                    Erfahre hier, wie es funktioniert und wie es mir das Leben erleichtert!
+                </p>
+                <p>
+                    Vorher habe ich dafür eine spezielle Website genutzt mit monatlichen/jährlichen Kosten.<br> 
+                    Jetzt geht es vor allen Dingen <b>kostenlos</b> und meiner Meinung nach auch noch <b>schneller</b> ;)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="section features">
+        <div class="container">
+            <h2>Was macht das Programm?</h2>
+            <ul>
+                <li>💡 <b>Analyse:</b> Identifiziert Änderungen in der Quell-Playlist.</li>
+                <li>🔄 <b>Synchronisierung:</b> Fügt neue Songs in die Ziel-Playlist hinzu.</li>
+                <li>📊 <b>Statistik:</b> Zeigt synchronisierte Songs und Fehler an.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="section how-it-works">
+        <div class="container">
+            <h2>Wie funktioniert es?</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <h3>1. API-Verbindung</h3>
+                    <p>Das Programm verbindet sich mit der Tidal-API, um auf die Playlists zuzugreifen.</p>
+                    <a href="https://tidalapi.netlify.app/" target="_blank" class="btn btn-doc">Zur API-Dokumentation</a>
+                </div>
+                <div class="step-card">
+                    <h3>2. Vergleich der Playlists</h3>
+                    <p>Die Quell-Playlist wird mit der Ziel-Playlist verglichen, um Unterschiede zu erkennen.</p>
+                </div>
+                <div class="step-card">
+                    <h3>3. Synchronisierung</h3>
+                    <p>Songs die in der Ziel-Playlist noch nicht vorhanden sind, werden hinzugefügt und die Playlist wird entsprechend auf die zuletzt hinzugefügten Lieder sortiert.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="code" class="section code">
+        <div class="container">
+            <h2>Ein Blick in den Code</h2>
+            <div class="code-container">
+                <pre><code id="code-block">
+1. import tidalapi
+2.
+3. def welcome():
+4.     print("Willkommen zu meinem Playlist Synchronisierer", "\n")
+5.     authenticate()
+6.
+7. def authenticate():
+8.     print("Anmeldung:")
+9.     session = tidalapi.Session()
+10.    session.login_oauth_simple()
+11.
+12.    if session.check_login():
+13.        print("")
+14.        print("Anmeldung erfolgreich", "\n")
+15.        get_track_ids(session)
+16.    else:
+17.        print("Anmeldung fehlgeschlagen")
+18.        print("Bitte erneut einloggen")
+19.        authenticate()
+20.
+21. def get_track_ids(session):
+22.     playlist_id_jann = "3962aa06-f821-4608-9862-ce97070e686a"
+23.     playlist_id_nati = "c1f1620f-1809-4873-b79b-9ecdac5babd1"
+24.
+25.     playlist_jann = session.playlist(playlist_id_jann)
+26.     playlist_nati = session.playlist(playlist_id_nati)
+27.
+28.     playlist_jann_count = playlist_jann.num_tracks
+29.     playlist_nati_count = playlist_nati.num_tracks
+30.
+31.     start_index_jann = max(0, playlist_jann_count - 1000)
+32.     start_index_nati = max(0, playlist_nati_count - 1000)
+33.
+34.     first_1000_tracks_jann = playlist_jann.tracks(offset=start_index_jann, limit=1000)
+35.     first_1000_tracks_nati = playlist_nati.tracks(offset=start_index_nati, limit=1000)
+36.
+37.     missing_tracks_jann = playlist_jann.tracks(offset=0, limit=start_index_jann)
+38.     missing_tracks_nati = playlist_nati.tracks(offset=0, limit=start_index_nati)
+39.
+40.     all_tracks_jann = first_1000_tracks_jann + missing_tracks_jann
+41.     all_tracks_nati = first_1000_tracks_nati + missing_tracks_nati
+42.
+43.     print(
+44.         "Erfolgreich geladene Titel aus ",
+45.         playlist_jann.name,
+46.         ": ",
+47.         str(playlist_jann_count),
+48.     )
+49.     print(
+50.         "Erfolgreich geladene Titel aus ",
+51.         playlist_nati.name,
+52.         ": ",
+53.         str(playlist_nati_count),
+54.         "\n",
+55.         "\n",
+56.     )
+57.
+58.     compare_playlists(all_tracks_jann, all_tracks_nati, playlist_nati)
+59.
+60. def compare_playlists(all_tracks_jann, all_tracks_nati, playlist_nati):
+61.     tracks_jann_ids = [track.id for track in all_tracks_jann]
+62.     tracks_nati_ids = [track.id for track in all_tracks_nati]
+63.
+64.     differend_ids = [
+65.         track_id for track_id in tracks_jann_ids if track_id not in tracks_nati_ids
+66.     ]
+67.
+68.     differend_songs = [
+69.         (x.name + " - " + x.artist.name)
+70.         for x in all_tracks_jann
+71.         if x.id in differend_ids
+72.     ]
+73.
+74.     add_to_playlist(differend_ids, len(differend_ids), differend_songs, playlist_nati)
+75.
+76. def add_to_playlist(differend_ids, count_ids, differend_songs, playlist_nati):
+77.     if count_ids == 0:
+78.         print("Keine Titel zum Hinzufügen", "\n")
+79.     else:
+80.         playlist_nati.add(differend_ids)
+81.         print("Erfolgreich hinzugefügt:", "\n")
+82.         for differend_song in differend_songs:
+83.             print(differend_song)
+84.
+85. welcome()           
+                </code></pre>
+                <div class="explanation-container">
+                    <p><strong>Zeile 1:</strong> Importiert die tidalapi-Bibliothek, um mit der Tidal-API zu arbeiten.</p>
+                    <p><strong>Zeile 3 - 5:</strong> Die Funktion "welcome" wird aufgerufen, um den Benutzer zu begrüßen und die Anmeldung zu starten.</p>
+                    <p><strong>Zeile 8 - 10:</strong> Erstellt den Session Token der Tidal API Verbindung und generiert den Link zur Anmeldung mit seinem Tidal Konto.</p>
+                    <p><strong>Zeile 12 - 15:</strong> Überprüft ob die Anmeldung erfolgreich war. Wenn ja, wird die Funktion "get_track_ids" aufgerufen und die benötigte Variable wird vererbt.</p>
+                    <p><strong>Zeile 16 - 19:</strong> Wenn die Anmeldung nicht erfolgreich war, wird die Funktion "authenticate" erneut aufgerufen.</p>
+                    <p><strong>Zeile 22 - 23:</strong> Die beiden Playlist-IDs werden seinen entsprechenden Variablen zugeordnet.</p>
+                    <p><strong>Zeile 25 - 26:</strong> Der Tidal API Session identifiziert die beiden Playlists mit dessen IDs.</p>
+                    <p><strong>Zeile 28 - 29:</strong> Die jeweilige Anzahl der Lieder von beiden Playlists wird ausgelesen.</p>
+                    <p><strong>Zeile 31 - 32:</strong> Festlegung bis zu welchem Index pro Einlesung eingelesen werden darf (Die Tidal API kann nur maximal 1000 Lieder pro Abfrage einlesen).</p>
+                    <p><strong>Zeile 34 - 35:</strong> Die ersten 1000 Lieder pro Playlist werden eingelesen.</p>
+                    <p><strong>Zeile 37 - 38:</strong> Die restlichen Lieder pro Playlist werden eingelesen.</p>
+                    <p><strong>Zeile 40 - 41:</strong> Die eingelesenen Lieder aus beiden Abfragen werden beide jeweils in eine Variable gespeichert.</p>
+                    <p><strong>Zeile 43 - 48:</strong> Die Anzahl der eingelesenen Lieder aus der ersten Playlist werden ausgegeben.</p>
+                    <p><strong>Zeile 49 - 56:</strong> Die Anzahl der eingelesenen Lieder aus der zweiten Playlist werden ausgegeben.</p>.</p>
+                    <p><strong>Zeile 58:</strong> Die Funktion "compare_playlists" wird aufgerufen und die benötigten Variablen werden vererbt.</p>
+                    <p><strong>Zeile 61 - 62:</strong> Schreibt alle IDs pro Playlist in ein jeweiliges Array.</p>
+                    <p><strong>Zeile 64 - 66:</strong> Die ID Unterschiede werden abgefragt (welche IDs hat Playlist 1 die Playlist 2 nicht hat) und in ein Array gespeichert.</p>
+                    <p><strong>Zeile 68 - 72:</strong> Der Name und der Künstler werden pro Lied kombiniert in ein Array gespeichert, wenn die ID des Lieds sich in dem Array aus Zeile 64 - 66 befindet.</p>
+                    <p><strong>Zeile 74:</strong> Die Funktion "add_to_playlist" wird aufgerufen und die benötigten Variablen werden vererbt.</p>
+                    <p><strong>Zeile 77 - 78:</strong> Wenn die Anzahl der unterschiedlichen IDs 0 beträgt, wird der Text ausgegeben, dass keine Lieder hinzugefügt werden können.</p>
+                    <p><strong>Zeile 79 - 83:</strong> Wenn die Bedingung aus Zeile 77 - 78 nicht zutrifft, werden die unterschiedlichen IDs der zweiten Playlist hinzugefügt. Anschließend werden noch die erfolgreich hinzugefügten Lieder ausgegeben.</p>
+                    <p><strong>Zeile 85:</strong> Die Start-Funktion "welcome" wird aufgerufen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="screenshot" class="section code-screenshot">
+        <div class="container">
+            <h2>Erfolgreiche Synchronisierung</h2>
+            <p>Hier siehst man ein Beispielergebnis nach der erfolgreichen Ausführung des Programms:</p>
+            <div class="screenshot-container">
+                <img src="tidalsync - Output Screenshot.png" alt="Erfolgreiche Programmausführung" class="screenshot-image">
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Jann Meßink - Tidal Playlist Synchronizer</p>
+        </div>
+    </footer>
+</body>
+</html>
